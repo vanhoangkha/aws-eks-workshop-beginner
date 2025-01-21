@@ -1,9 +1,8 @@
 ---
 title: "Deploy VSCode as a web app with EC2 and CloudFront"
-date: "`r Sys.Date()`"
-weight: 2
+weight: 1
 chapter: false
-pre: "<b> 2.1.2 </b>"
+pre: "<b> 2.1.1 </b>"
 ---
 
 

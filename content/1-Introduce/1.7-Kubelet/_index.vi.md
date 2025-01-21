@@ -1,6 +1,5 @@
 ---
 title: "Kubelet"
-date: "`r Sys.Date()`"
 weight: 7
 chapter: false
 pre: "<b> 1.7 </b>"
@@ -12,7 +11,7 @@ Kubelet là một trong những thành phần quan trọng của Kubernetes. Nó
 
 Mặc định, Kubeadm không triển khai Kubelet. Bạn cần phải tự tải về và cài đặt nó.
 
-![Kubernetes](../../../../images/part1/7/0007.png?featherlight=false&width=60pc)
+![Kubernetes](../../../../images/1/7/0007.png?featherlight=false&width=60pc)
 
 ### Cài đặt Kubelet
 

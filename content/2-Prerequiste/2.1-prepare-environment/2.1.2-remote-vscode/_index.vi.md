@@ -1,9 +1,8 @@
 ---
 title: "Triển khai VSCode Server trên EC2 và truy cập bằng VSCode trên máy của bạn"
-date: "`r Sys.Date()`"
-weight: 3
+weight: 2
 chapter: false
-pre: "<b> 2.1.3 </b>"
+pre: "<b> 2.1.2 </b>"
 ---
 
 ### **Tạo Key Pair**

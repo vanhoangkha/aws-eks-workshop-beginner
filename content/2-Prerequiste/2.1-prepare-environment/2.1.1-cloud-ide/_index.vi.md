@@ -1,9 +1,8 @@
 ---
 title: "Triển khai VSCode dưới dạng web host trên EC2 và CloudFront"
-date: "`r Sys.Date()`"
-weight: 2
+weight: 1
 chapter: false
-pre: "<b> 2.1.2 </b>"
+pre: "<b> 2.1.1 </b>"
 ---
 
 **_Lưu ý:_** _Hiện tại AWS sắp ngừng cung cấp Cloud9. Chúng tôi hiện tại đang tìm các giải pháp thay thế sớm nhất có thể._

@@ -1,6 +1,5 @@
 ---
 title: "Làm quen với Amazon Elastic Kubernetes Service"
-date: "`r Sys.Date()`"
 weight: 1
 chapter: false
 ---

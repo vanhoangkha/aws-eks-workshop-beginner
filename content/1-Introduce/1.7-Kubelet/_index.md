@@ -1,6 +1,5 @@
 ---
 title: "Kubelet"
-date: "`r Sys.Date()`"
 weight: 7
 chapter: false
 pre: "<b> 1.7 </b>"
@@ -11,7 +10,7 @@ In this section we will take a look at kubelet.
 #### Kubelet is the sole point of contact for the kubernetes cluster
 - The **`kubelet`** will create the pods on the nodes, the scheduler only decides which pods goes where.
 
-![Kubernetes](../../images/part1/7/0007.png?featherlight=false&width=60pc)
+![Kubernetes](../../images/1/7/0007.png?featherlight=false&width=60pc)
 
 ### Install kubelet
 - Kubeadm does not deploy kubelet by default. You must manually download and install it.

@@ -1,9 +1,8 @@
 ---
 title: "Deploying VSCode on EC2 and access it from your local VSCode"
-date: "`r Sys.Date()`"
-weight: 3
+weight: 2
 chapter: false
-pre: "<b> 2.1.3 </b>"
+pre: "<b> 2.1.2 </b>"
 ---
 ### **Create your Key Pair**
 {{% notice note %}}

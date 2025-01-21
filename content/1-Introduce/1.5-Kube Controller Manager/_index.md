@@ -1,6 +1,5 @@
 ---
 title: "Kube Controller Manager"
-date: "`r Sys.Date()`"
 weight: 5
 chapter: false
 pre: "<b> 1.5 </b>"
@@ -11,7 +10,7 @@ In this section, we will take a look at kube-controller-manager.
 #### Kube Controller Manager manages various controllers in kubernetes.
 - In kubernetes terms, a controller is a process that continuously monitors the state of the components within the system and works towards bringing the whole system to the desired functioning state.
 
-![Kubernetes](../../images/part1/5/0006.png?featherlight=false&width=60pc)
+![Kubernetes](../../images/1/5/0006.png?featherlight=false&width=60pc)
 
 ### Node Controller
 - Responsible for monitoring the state of the Nodes and taking necessary actions to keep the application running. 
