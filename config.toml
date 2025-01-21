@@ -2,8 +2,7 @@
 theme = "hugo-theme-learn"
 
 # url
-#URL = "/"
-relativeURLs = true
+baseURL = "https://longthg-workshops.github.io/EKS-Workshop-1" #Replace this with your URL
 
 # For search functionality
 [outputs]
