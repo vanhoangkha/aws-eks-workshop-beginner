@@ -1,6 +1,5 @@
 ---
 title: "Cluster Architechture"
-date: "`r Sys.Date()`"
 weight: 1
 chapter: false
 pre: "<b> 1.1 </b>"
@@ -9,7 +8,7 @@ pre: "<b> 1.1 </b>"
 #### **The architectural concepts behind Kubernetes**
 A Kubernetes cluster consists of a control plane and one or more worker nodes. Here's a brief overview of the main components:
 
-![Kubernetes Arch](../../images/part1/1/0002.png?featherlight=false&width=60pc)
+![Kubernetes Arch](/images/1/1/0002.png?featherlight=false&width=60pc)
 
 **1. Control Plane Components:** Manage the overall state of the cluster:
 

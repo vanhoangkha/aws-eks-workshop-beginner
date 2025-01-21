@@ -1,6 +1,5 @@
 ---
 title: "Triển khai thành phần đầu tiên"
-date: "`r Sys.Date()`"
 weight: 4
 chapter: false
 pre: "<b> 3.4 </b>"
@@ -14,17 +13,17 @@ pre: "<b> 3.4 </b>"
 
 Cách dễ nhất để duyệt các tuyên bố YAML cho ứng dụng mẫu và các module trong hội thảo này là sử dụng trình duyệt tệp trong **Cloud9**:
 
-![EKS](../../../images/part6/00021.png?featherlight=false&width=60pc)
+![EKS](/images/6/00021.png?featherlight=false&width=30pc)
 
 Mở rộng các mục `eks-workshop` và sau đó `base-application` sẽ cho phép bạn duyệt các tuyên bố tạo thành trạng thái ban đầu của ứng dụng mẫu:
 
-![EKS](../../../images/part6/00022.png?featherlight=false&width=60pc)
+![EKS](/images/6/00022.png?featherlight=false&width=30pc)
 
 Cấu trúc bao gồm một thư mục cho mỗi thành phần ứng dụng được mô tả trong phần **Ứng dụng mẫu**.
 
 Thư mục `modules` chứa các bộ tuyên bố mà chúng ta sẽ áp dụng vào cụm trong các bài tập thực hành lab sau:
 
-![EKS](../../../images/part6/00023.png?featherlight=false&width=60pc)
+![EKS](/images/6/00023.png?featherlight=false&width=30pc)
 
 Trước khi làm bất kỳ điều gì, hãy kiểm tra các **Namespaces** hiện tại trong cụm **EKS** của chúng ta:
 

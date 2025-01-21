@@ -1,6 +1,5 @@
 ---
 title: "Kiến trúc Cluster"
-date: "`r Sys.Date()`"
 weight: 1
 chapter: false
 pre: "<b> 1.1 </b>"
@@ -10,7 +9,7 @@ pre: "<b> 1.1 </b>"
 
 Kiến trúc của một cluster Kubernetes bao gồm các thành phần chính sau:
 
-![Kubernetes Arch](../../../images/part1/1/0002.png?featherlight=false&width=60pc)
+![Kubernetes Arch](/images/1/1/0002.png?featherlight=false&width=60pc)
 
 1. **Master Node**: Master node quản lý và điều khiển toàn bộ cluster. Các thành phần chính trên master node bao gồm:
 

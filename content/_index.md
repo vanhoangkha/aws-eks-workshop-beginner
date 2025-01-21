@@ -1,6 +1,5 @@
 ---
 title: "Getting started with Amazon Elastic Kubernetes Service"
-date: "`r Sys.Date()`"
 weight: 1
 chapter: false
 ---
@@ -32,7 +31,7 @@ Kubernetes provides:
 Amazon Elastic Kubernetes Service (Amazon EKS) is a managed service that eliminates the need to install, operate, and maintain your own Kubernetes control plane on Amazon Web Services (AWS).
 
 ### Features of Amazon EKS
-The following are key features of Amazon EKS:
+A few key features of Amazon EKS can be listed, such as:
 
 #### Secure networking and authentication
 Amazon EKS integrates your Kubernetes workloads with AWS networking and security services. It also integrates with AWS Identity and Access Management (IAM) to provide authentication for your Kubernetes clusters.
