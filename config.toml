@@ -3,6 +3,7 @@ theme = "hugo-theme-learn"
 
 # url
 #URL = "/"
+relativeURLs = true
 
 # For search functionality
 [outputs]
