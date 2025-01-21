@@ -2,7 +2,7 @@
 theme = "hugo-theme-learn"
 
 # url
-URL = "/EKS-Workshop-1"
+#URL = "/"
 
 # For search functionality
 [outputs]
