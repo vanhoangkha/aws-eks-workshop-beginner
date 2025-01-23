@@ -9,13 +9,13 @@ Chào mừng bạn đến với lab thực hành đầu tiên trong workshop **E
 
 Hãy triển khai workload đầu tiên của bạn vào cluster **EKS** trong môi trường lab của bạn và khám phá !
 
-Trước khi chúng ta bắt đầu, chúng ta cần chạy lệnh sau để chuẩn bị môi trường **Cloud9** và cluster **EKS** của chúng ta:
+Trước khi chúng ta bắt đầu, chúng ta cần chạy lệnh sau để chuẩn bị môi trường **VSCode** và cluster **EKS** của chúng ta:
 
 ```bash
 $ prepare-environment introduction/getting-started
 ```
 
-Lệnh này làm gì? Đối với lab này, nó sao chép kho Git Workshop **EKS** vào môi trường **Cloud9** để các tệp **Kubernetes Manifest** cần thiết tồn tại trên hệ thống tệp.
+Lệnh này làm gì? Đối với lab này, nó sao chép kho Git Workshop **EKS** vào môi trường **VSCode** để các tệp **Kubernetes Manifest** cần thiết tồn tại trên hệ thống tệp.
 
 Bạn sẽ thấy trong các lab tiếp theo, chúng ta cũng sẽ chạy lệnh này, nơi nó sẽ thực hiện hai chức năng quan trọng bổ sung:
 

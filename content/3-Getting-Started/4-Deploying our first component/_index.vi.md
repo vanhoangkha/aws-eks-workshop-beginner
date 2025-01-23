@@ -11,7 +11,7 @@ pre: "<b> 3.4 </b>"
 
 Ứng dụng mẫu được tạo thành từ một tập hợp các tuyên bố **Kubernetes** được tổ chức một cách dễ dàng áp dụng bằng **Kustomize**. **Kustomize** là một công cụ mã nguồn mở cũng được cung cấp như một tính năng gốc của CLI `kubectl`. Hội thảo này sử dụng **Kustomize** để áp dụng các thay đổi vào các tuyên bố **Kubernetes**, giúp việc hiểu các thay đổi đối với các tệp tuyên bố mà không cần phải chỉnh sửa YAML thủ công. Khi chúng ta làm việc qua các module khác nhau của hội thảo này, chúng ta sẽ áp dụng các overlay và patch một cách từ từ bằng **Kustomize**.
 
-Cách dễ nhất để duyệt các tuyên bố YAML cho ứng dụng mẫu và các module trong hội thảo này là sử dụng trình duyệt tệp trong **Cloud9**:
+Cách dễ nhất để duyệt các tuyên bố YAML cho ứng dụng mẫu và các module trong hội thảo này là sử dụng trình duyệt tệp trong **VSCode**:
 
 ![EKS](/images/6/00021.png?featherlight=false&width=30pc)
 
