@@ -4,22 +4,50 @@ weight: 1
 chapter: false
 ---
 
-# Làm quen với Amazon Elastic Kubernetes Service
+# Làm quen với Amazon Elastic Kubernetes Service (EKS)
 
-### Mục đích Workshop
-Workshop này thuộc chuỗi workshop về EKS. Tại đây, chúng tôi cung cấp cái nhìn tổng quan, cũng như giúp bạn làm quen với việc triển khai, cấu hình và vận hành các ứng dụng của bạn trên Kubernetes. Với workshop này, chúng tôi hy vọng bạn sẽ hiểu rõ hơn về cách tạo cụm EKS, thực thi các lệnh và triển khai một số công việc đơn giản trên cụm.
+#### Tổng quan
 
-### Kubernetes
-Kubernetes là một **nền tảng mã nguồn mở**, linh hoạt, có khả năng mở rộng, phục vụ việc quản lý các ứng dụng được đóng gói và các dịch vụ liên quan, giúp việc cấu hình và tự động hóa quá trình triển khai ứng dụng trở nên thuận tiện hơn. Được biết đến như một hệ sinh thái lớn và phát triển nhanh chóng, Kubernetes cung cấp sự hỗ trợ rộng rãi qua các dịch vụ và công cụ đa dạng.
+Amazon Elastic Kubernetes Service (EKS) là một dịch vụ được quản lý đầy đủ giúp bạn chạy Kubernetes trên AWS mà không cần phải cài đặt và duy trì control plane riêng. Workshop này sẽ giới thiệu cho bạn những kiến thức cơ bản về EKS và cách triển khai ứng dụng trên nền tảng này.
 
-Tên **Kubernetes** bắt nguồn từ tiếng Hy Lạp, nghĩa là người lái tàu hoặc hoa tiêu. Kubernetes được Google công bố mã nguồn vào năm 2014, dựa trên gần một thập kỷ kinh nghiệm quản lý workload lớn trong thực tế của Google, kết hợp với các ý tưởng và **best practices** từ cộng đồng.
+#### Mục tiêu học tập
 
-### Những việc bạn sẽ làm
+Sau khi hoàn thành workshop này, bạn sẽ có khả năng:
 
-- Tìm hiểu sơ lược về kiến trúc Kubernetes.
+1. Hiểu được kiến trúc cơ bản của Kubernetes và cách nó hoạt động trên AWS
+2. Thiết lập và quản lý một cụm EKS từ đầu đến cuối
+3. Triển khai các ứng dụng web đơn giản trên EKS
+4. Sử dụng các công cụ phổ biến như Kustomize và Helm để quản lý ứng dụng
 
-- Tìm hiểu cách triển khai một đối tượng Deployment.
+#### Giới thiệu về Kubernetes
 
-- Tạo cụm Amazon EKS và triển khai một ứng dụng web đơn giản lên đó.
+Kubernetes, thường được viết tắt là K8s, là một nền tảng điều phối container mã nguồn mở được phát triển bởi Google. Dự án này được xây dựng dựa trên hơn 15 năm kinh nghiệm vận hành workload quy mô lớn tại Google, kết hợp với những đóng góp tốt nhất từ cộng đồng.
 
-- Sử dụng các công cụ Kustomize và Helm.
+Tên gọi "Kubernetes" có nguồn gốc từ tiếng Hy Lạp (κυβερνήτης), có nghĩa là "người lái tàu" hoặc "hoa tiêu" - một cái tên phản ánh chính xác vai trò của nó trong việc điều hướng và quản lý các container trong môi trường cloud.
+
+#### Nội dung chương trình
+
+Trong workshop này, chúng ta sẽ tìm hiểu:
+
+1. Kiến trúc cơ bản của Kubernetes:
+   - Control plane và worker nodes
+   - Các thành phần chính như API server, etcd, scheduler
+   - Cách các components tương tác với nhau
+
+2. Triển khai ứng dụng trên EKS:
+   - Tạo và cấu hình cụm EKS
+   - Viết manifests cho Kubernetes
+   - Triển khai và quản lý các Deployments
+
+3. Công cụ và best practices:
+   - Sử dụng Kustomize để quản lý cấu hình
+   - Làm quen với Helm charts
+   - Các phương pháp triển khai và monitoring hiệu quả
+
+#### Yêu cầu tiên quyết
+
+Để tham gia workshop này một cách hiệu quả, bạn nên có:
+- Kiến thức cơ bản về Docker và containers
+- Tài khoản AWS với đầy đủ quyền hạn cần thiết
+- Công cụ kubectl và AWS CLI đã được cài đặt
+- Hiểu biết căn bản về command line và YAML

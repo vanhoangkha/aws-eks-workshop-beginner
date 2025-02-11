@@ -5,67 +5,46 @@ chapter: false
 pre: "<b> 1.2 </b>"
 ---
 
-### Pod
 
-Trong hệ thống **Kubernetes**, **Pod** là một khái niệm quan trọng. Kubernetes không triển khai trực tiếp các container lên node làm việc (worker node). Thay vào đó, Kubernetes sử dụng Pods để quản lý các container.
+#### Pod - Đơn vị Cơ bản của Kubernetes
 
-Mỗi Pod trong Kubernetes đều chứa một hoặc nhiều container, nhưng thông thường chúng chứa một container đơn, và đó là thể hiện của ứng dụng bạn đang chạy. Pod sẽ có mối quan hệ một-một với các container chạy ứng dụng của bạn.
+Pod là đơn vị triển khai nhỏ nhất và cơ bản nhất trong kiến trúc Kubernetes. Thay vì triển khai container trực tiếp lên worker node, Kubernetes sử dụng Pod như một wrapper để quản lý và điều phối container.
 
-![Kubernetes Pods](/images/1/2/0009.png?featherlight=false&width=60pc)
+#### Đặc điểm của Pod
 
-#### Pod chứa nhiêu Container
+Một Pod có thể chứa một hoặc nhiều container, tuy nhiên best practice là mỗi Pod chỉ nên chứa một container chính để đảm bảo tính modularity và maintainability. Khi triển khai microservices trên Kubernetes, mỗi Pod thường đại diện cho một instance của service.
 
-Một Pod có thể chứa một hoặc nhiều container, thường **khác loại**.
+#### Triển khai Pod trên EKS
 
-#### Cách triển khai Pods?
-
-Bây giờ, hãy xem cách tạo một Pod **nginx** sử dụng **kubectl**.
-
-Để triển khai một container Docker bằng cách tạo một Pod, bạn có thể sử dụng lệnh sau:
+Để triển khai một Pod nginx đơn giản trên Amazon EKS, sử dụng kubectl command sau:
 
 ```bash
-$ kubectl run nginx --image nginx
+kubectl run nginx --image nginx
 ```
 
-Để lấy danh sách các Pods, bạn có thể sử dụng lệnh:
+Kiểm tra trạng thái Pod:
 
 ```bash
-$ kubectl get pods
+kubectl get pods
 ```
 
-### Deployment
+#### Deployment - Quản lý Pod và ReplicaSet
 
-#### Deployment là gì ?
+Deployment là một resource cao cấp trong Kubernetes, cung cấp khả năng khai báo cập nhật cho Pod và ReplicaSet. Deployment Controller đảm bảo trạng thái thực tế của cluster khớp với trạng thái mong muốn được định nghĩa trong manifest.
 
-Deployment (Bản triển khai) cung cấp các cập nhật khai báo cho Pod và ReplicaSet.
+#### Use Cases của Deployment
 
-Khi mô tả trạng thái mong muốn trong Deployment, Deployment Controller sẽ thay đổi trạng thái thực tế thành trạng thái mong muốn với sự kiểm soát về tốc độ. Bạn có thể định nghĩa Deployment để tạo ReplicaSet mới, hoặc xóa Deployment hiện có và áp dụng tất cả tài nguyên của chúng bằng Deployment mới.
+Deployment thường được sử dụng trong các tình huống sau:
 
-{{% notice note %}}
-Không được quản lý ReplicaSets do Deployment sở hữu. Hãy cân nhắc khởi tạo Issue trong [kho GitHub chính của Kubernetes](https://github.com/kubernetes/kubernetes/issues) nếu trường hợp sử dụng của bạn không được đề cập ở phần tiếp theo.
-{{% /notice %}}
+1. Rolling update và rollback application
+2. Scale số lượng replica của ứng dụng
+3. Quản lý version của container image
+4. Tự động recovery khi Pod gặp sự cố
 
-#### Các trường hợp sử dụng
-Sau đây là một số trường hợp sử dụng điển hình cho Triển khai:
+#### Cấu hình Deployment trên EKS
 
-- Tạo Triển khai để triển khai ReplicaSet. ReplicaSet tạo Pod ở chế độ nền. Kiểm tra trạng thái của triển khai để xem có thành công hay không.
+Ví dụ về Deployment manifest (`deployment-definition.yaml`):
 
-- Khai báo trạng thái mới của Pod bằng cách cập nhật PodTemplateSpec của Triển khai. Một ReplicaSet mới được tạo và Triển khai quản lý việc di chuyển Pod từ ReplicaSet cũ sang ReplicaSet mới với tốc độ được kiểm soát. Mỗi ReplicaSet mới sẽ cập nhật bản sửa đổi của Triển khai.
-
-- Quay lại bản sửa đổi Triển khai trước đó nếu trạng thái hiện tại của Triển khai không ổn định. Mỗi lần quay lại sẽ cập nhật bản sửa đổi của Triển khai.
-
-- Mở rộng Triển khai để tạo điều kiện tải nhiều hơn.
-
-- Tạm dừng triển khai Triển khai để áp dụng nhiều bản sửa lỗi cho PodTemplateSpec của nó, sau đó tiếp tục để bắt đầu triển khai mới.
-
-- Sử dụng trạng thái của Triển khai như một chỉ báo cho biết quá trình triển khai đã bị kẹt.
-
-- Dọn dẹp các ReplicaSet cũ mà bạn không cần nữa.
-
-
-#### Tạo một Deployment bằng tập tin định nghĩa YAML
-
-**`deployment-definition.yaml`**
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -90,69 +69,46 @@ spec:
         - containerPort: 80
 ```
 
-Trong ví dụ này:
+#### Quản lý Deployment
 
-- Một Deployment có tên `nginx-deployment` được tạo, được chỉ định bởi trường `.metadata.name`. Tên này sẽ trở thành cơ sở cho ReplicaSet và Pod được tạo sau đó. Xem Viết Deployment Spec để biết thêm chi tiết.
+Triển khai Deployment:
 
-- Deployment tạo ra một ReplicaSet tạo ra ba Pod được sao chép, được chỉ định bởi trường `.spec.replicas`.
+```bash
+kubectl create -f deployment-definition.yaml
+```
 
-- Trường `.spec.selector` xác định cách ReplicaSet được tạo tìm Pod nào để quản lý. Trong trường hợp này, bạn chọn một nhãn được xác định trong mẫu Pod (ứng dụng: nginx). Tuy nhiên, có thể áp dụng các quy tắc lựa chọn phức tạp hơn, miễn là bản thân mẫu Pod đáp ứng quy tắc.
+Kiểm tra status:
+
+```bash
+kubectl get deployment
+kubectl get replicaset
+kubectl get pods
+kubectl get all
+```
+
+#### Best Practices
+
+1. Sử dụng resource requests và limits cho Pod
+2. Implement health checks và readiness probes
+3. Cấu hình pod disruption budget để đảm bảo high availability
+4. Sử dụng rolling update strategy để minimize downtime
+5. Implement proper labeling và tagging cho resource management
+
+#### Integration với AWS Services
+
+Khi triển khai trên Amazon EKS, Pod và Deployment có thể tích hợp với nhiều AWS service:
+
+- Amazon CloudWatch để monitoring và logging
+- AWS IAM để authentication và authorization
+- Amazon ECR để container image storage
+- AWS Load Balancer để expose service
+
+#### Tham khảo
+
+- [Amazon EKS Documentation](https://docs.aws.amazon.com/eks/)
+- [Kubernetes Official Documentation](https://kubernetes.io/docs/)
+- [AWS Container Services Best Practices](https://aws.amazon.com/containers/best-practices/)
 
 {{% notice note %}}
-Trường `.spec.selector.matchLabels` là hệ ánh xạ các cặp {key,value}. Một {key,value} duy nhất trong hệ ánh xạ matchLabels tương đương với một phần tử của matchExpressions, có trường khóa là "key", toán tử là "In" và mảng các giá trị ​​chỉ chứa "value". Tất cả các yêu cầu, từ cả matchLabels và matchExpressions, phải được đáp ứng để khớp.
+Khi làm việc với Deployment trên EKS, cần đảm bảo tuân thủ AWS Well-Architected Framework và security best practices.
 {{% /notice %}}
-
-- Một trường mẫu chứa các trường con sau:
-
-  - Các Pod được gắn nhãn `app: nginx` nhờ trường `.metadata.labels`.
-
-  - Đặc tả của mẫu Pod, hoặc trường `.template.spec`, cho biết rằng các Pod chỉ chạy một container, `nginx`, được khởi tạo từ ảnh **_nginx_** từ Docker Hub, phiên bản 1.14.2.
-
-  - Tạo một container và đặt tên là nginx bằng cách sử dụng trường `.spec.template.spec.containers[0].name`.
-
-#### Các lệnh
-
-Sau khi tệp này đã sẵn sàng, tạo **deployment** bằng cách sử dụng tệp định nghĩa **deployment**:
-
-```bash
-$ kubectl create -f deployment-definition.yaml
-```
-
-Để xem **deployment** đã được tạo:
-
-```bash
-$ kubectl get deployment
-```
-
-**Deployment** tự động tạo một **ReplicaSet**. Để xem các **ReplicaSet**:
-
-```bash
-$ kubectl get replicaset
-```
-
-Các **ReplicaSet** cuối cùng sẽ tạo ra các **POD**. Để xem các **POD**:
-
-```bash
-$ kubectl get pods
-```
-
-Để xem tất cả các đối tượng cùng một lúc:
-
-```bash
-$ kubectl get all
-```
-
-### Đọc thêm:
-
-#### Pod:
-
-- [Kubernetes - Pod](https://kubernetes.io/docs/concepts/workloads/pods/pod/)
-- [Kubernetes - Pod Overview](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/)
-- [Kubernetes - Explore Introduction](https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/)
-
-#### Deployment:
-
-- [Tìm hiểu về Deployment (bản triển khai)](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
-- [Triển khai một ứng dụng](https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-app/deploy-intro/)
-- [Quản lý các Deployment](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/)
-- [Làm việc với các đối tượng Kubernetes](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)

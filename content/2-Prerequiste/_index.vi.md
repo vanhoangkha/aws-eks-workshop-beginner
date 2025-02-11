@@ -5,18 +5,33 @@ chapter: false
 pre: "<b> 2. </b>"
 ---
 
-Trước khi làm các bài thực hành của bộ workshop EKS, vui lòng thực hiện ba bước sau đây:
 
-1. [Chuẩn bị môi trường](./2.1-prepare-environment)
+#### Giới thiệu
 
-    - Tạo và chuẩn bị cho hệ thống của bạn kết nối được với AWS.
+Trước khi bắt đầu thực hành với bộ workshop Amazon Elastic Kubernetes Service (Amazon EKS), bạn cần hoàn thành ba bước chuẩn bị quan trọng sau đây. Những bước này sẽ đảm bảo môi trường của bạn được cấu hình đúng cách và sẵn sàng cho việc triển khai các workload trên Kubernetes.
 
-    - Chuẩn bị IDE và cây thư mục mã nguồn.
+#### Chuẩn bị môi trường AWS
 
-2. [Tạo cụm EKS](./2.2-cluster-creation)
+Bước đầu tiên là thiết lập môi trường làm việc của bạn với AWS. Quá trình này bao gồm:
 
-    - Tạo cụm EKS để triển khai các khối công việcs.
+- Cấu hình AWS credentials để xác thực và kết nối với tài khoản AWS của bạn
+- Cài đặt và cấu hình AWS CLI để tương tác với các dịch vụ AWS thông qua command line
+- Thiết lập Integrated Development Environment (IDE) phù hợp cho việc phát triển
+- Tạo cấu trúc thư mục source code theo tiêu chuẩn
 
-    - Tạo bằng CloudFormation hoặc Terraform
+#### Khởi tạo Amazon EKS Cluster
 
-3. [Tìm hiểu cấu trúc lab](./2.3-structure)
+Tiếp theo, bạn sẽ cần tạo một EKS cluster để chạy các Kubernetes workload. Bạn có hai lựa chọn để provisioning cluster:
+
+- Sử dụng AWS CloudFormation template để tự động hóa việc tạo infrastructure
+- Áp dụng Infrastructure as Code với Terraform để quản lý tài nguyên AWS
+
+#### Tìm hiểu cấu trúc Laboratory
+
+Bước cuối cùng là làm quen với cấu trúc của các bài lab trong workshop. Điều này sẽ giúp bạn:
+
+- Hiểu rõ flow của các bài thực hành
+- Nắm được các thành phần và tài nguyên sẽ được sử dụng
+- Chuẩn bị tốt cho việc thực hiện các lab tiếp theo
+
+Mỗi bước trên đều được thiết kế để đảm bảo bạn có một nền tảng vững chắc trước khi đi vào các phần thực hành chuyên sâu với Amazon EKS.

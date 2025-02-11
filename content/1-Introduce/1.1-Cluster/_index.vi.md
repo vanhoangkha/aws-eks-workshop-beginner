@@ -1,44 +1,120 @@
 ---
-title: "Kiến trúc Cluster"
+title: "Kiến trúc Cluster Kubernetes (K8s)"
 weight: 1
 chapter: false
 pre: "<b> 1.1 </b>"
 ---
 
-#### **Kiến trúc của một cluster Kubernetes**
 
-Kiến trúc của một cluster Kubernetes bao gồm các thành phần chính sau:
 
-![Kubernetes Arch](/images/1/1/0002.png?featherlight=false&width=60pc)
+#### Tổng quan
 
-1. **Master Node**: Master node quản lý và điều khiển toàn bộ cluster. Các thành phần chính trên master node bao gồm:
+Kubernetes là một nền tảng điều phối container mã nguồn mở được thiết kế để tự động hóa việc triển khai, mở rộng và quản lý các ứng dụng container hóa. Hệ thống này được tổ chức theo kiến trúc master-worker, trong đó mỗi thành phần đều có vai trò quan trọng trong việc duy trì hoạt động ổn định của cluster.
 
-   - **API Server**: API server là giao diện chính để tương tác với cluster. Tất cả các yêu cầu API từ các thành phần khác đều được xử lý thông qua API server.
-   
-   - **Scheduler**: Scheduler quyết định nơi chạy các pod mới dựa trên yêu cầu tài nguyên, các ràng buộc và chính sách đã được định nghĩa.
-   
-   - **Controller Manager**: Controller manager chịu trách nhiệm kiểm soát trạng thái của các đối tượng trong cluster (ví dụ: pods, services, replication controllers).
-   
-   - **etcd**: etcd là một cơ sở dữ liệu phân tán dùng để lưu trữ trạng thái của toàn bộ cluster.
+![Kubernetes Architecture](/images/1/1/0002.png?featherlight=false&width=60pc)
 
-2. **Worker Node**: Các worker node là nơi chứa các container và nơi mà các ứng dụng thực sự chạy. Mỗi worker node có các thành phần sau:
+#### Control Plane (Master Node)
 
-   - **Kubelet**: Kubelet là một agent chạy trên mỗi node và quản lý việc chạy các container trên node đó.
-   
-   - **Kube-proxy**: Kube-proxy quản lý việc giao tiếp mạng giữa các pod và các dịch vụ khác trong cluster.
-   
-   - **Container Runtime**: Container runtime (như Docker hoặc containerd) là phần mềm chịu trách nhiệm quản lý các container.
+Control Plane đóng vai trò là bộ não của cluster Kubernetes, bao gồm các thành phần核心 (core components) sau:
 
-3. **Pods**: Pod là đơn vị nhỏ nhất trong Kubernetes, mỗi pod chứa một hoặc nhiều container. Các container trong cùng một pod chia sẻ cùng một không gian mạng và lưu trữ.
+#### API Server
 
-4. **Services**: Services định tuyến yêu cầu đến các pod. Một service đại diện cho một nhóm các pod và cung cấp cách truy cập đồng nhất đến chúng.
+API Server hoạt động như một gateway chính của cluster, xử lý tất cả các communication giữa các thành phần khác nhau. API Server implement một RESTful API interface, cho phép các tool như kubectl, dashboard và các ứng dụng khác tương tác với cluster. API Server cũng thực hiện authentication và authorization cho mọi request.
 
-5. **Volumes**: Volumes là cách để lưu trữ dữ liệu dạng trên đĩa mà các container có thể chia sẻ và truy cập.
+#### etcd 
 
-6. **Namespace**: Namespace cho phép chia cluster thành các phần nhỏ hơn, mỗi phần có thể có các tài nguyên riêng biệt và được cấu hình riêng.
+etcd là một distributed key-value store đảm bảo high availability cho cluster state data. Nó lưu trữ toàn bộ configuration data và state information của cluster, hoạt động theo distributed consensus algorithm Raft để đảm bảo data consistency.
 
-7. **Ingress Controller**: Ingress controller quản lý việc điều hướng yêu cầu HTTP/HTTPS đến các dịch vụ trong cluster dựa trên các quy tắc cấu hình.
+#### Scheduler
 
-8. **Storage Classes**: Storage classes định nghĩa các loại lưu trữ khác nhau các persistent volume có thể yêu cầu.
+Scheduler chịu trách nhiệm watching các newly created pod và assign chúng vào các node phù hợp. Quá trình scheduling được thực hiện dựa trên nhiều factor như:
 
-Tất cả các thành phần này làm việc cùng nhau để tạo ra một môi trường chạy ứng dụng linh hoạt và mạnh mẽ trên Kubernetes cluster.
+- Resource requirements
+- Hardware/software constraints
+- Affinity/anti-affinity specifications 
+- Data locality
+- Inter-workload interference
+
+#### Controller Manager
+
+Controller Manager chạy các controller process để regulate cluster state. Một số controller quan trọng bao gồm:
+
+- Node Controller: Monitoring node health
+- Replication Controller: Maintain pod replicas
+- Endpoints Controller: Populate endpoints objects
+- Service Account & Token Controllers: Handle default accounts và API access tokens
+
+#### Worker Nodes
+
+Worker nodes là nơi application workloads thực sự được running. Mỗi node bao gồm các thành phần sau:
+
+#### Kubelet
+
+Kubelet là primary node agent chạy trên mỗi node. Nó đảm bảo:
+
+- Container running trong pod
+- Node registration với cluster
+- Pod và container health monitoring
+- Resource usage reporting
+
+#### Container Runtime
+
+Container Runtime Interface (CRI) implementation như Docker hoặc containerd chịu trách nhiệm:
+
+- Pulling container images
+- Running containers
+- Managing container lifecycle
+- Handling container networking
+
+#### Kube Proxy 
+
+Kube Proxy maintain network rules trên nodes để enable pod networking và load balancing. Nó implement phần network portion của Kubernetes Service concept.
+
+#### Workload Resources
+
+#### Pods
+
+Pod là smallest deployable unit trong Kubernetes. Mỗi pod encapsulate:
+
+- One or more containers
+- Storage resources
+- Unique network IP
+- Options governing container runtime behavior
+
+#### Services
+
+Service là một abstraction layer define một logical set of pods và policy để access chúng. Types của service bao gồm:
+
+- ClusterIP: Internal cluster access
+- NodePort: External access via node port
+- LoadBalancer: External access via cloud provider load balancer
+- ExternalName: External service mapping
+
+#### Additional Components
+
+#### Storage
+
+Kubernetes cung cấp nhiều storage options:
+
+- Persistent Volumes (PV): Cluster-wide storage resources
+- Storage Classes: Dynamic volume provisioning
+- Volume Claims (PVC): Storage requests từ pods
+
+#### Networking
+
+Network connectivity được handle bởi:
+
+- Container Network Interface (CNI) plugins
+- Service networking
+- Ingress controllers cho HTTP/HTTPS routing
+
+#### Security
+
+Security được implement qua:
+
+- Role-Based Access Control (RBAC)
+- Network Policies
+- Pod Security Policies
+- Secret Management
+
+Kiến trúc modular này cho phép Kubernetes scale efficiently và maintain high availability cho enterprise workloads. Mỗi component được thiết kế để có thể được replaced hoặc extended, tạo nên một hệ thống flexible và robust.

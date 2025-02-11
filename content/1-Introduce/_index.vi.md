@@ -5,108 +5,139 @@ chapter: false
 pre: "<b> 1. </b>"
 ---
 
-### Kubernetes
-#### Tổng quan về Kubernetes
 
-Kubernetes là một nền tảng nguồn mở, có tính cơ động, có thể mở rộng để quản lý các ứng dụng được đóng gói và các service, giúp thuận lợi trong việc cấu hình và tự động hoá việc triển khai ứng dụng. Kubernetes là một hệ sinh thái lớn và phát triển nhanh chóng. Các dịch vụ, sự hỗ trợ và công cụ có sẵn rộng rãi.
+#### Tổng Quan về Kubernetes
 
-Tên gọi Kubernetes có nguồn gốc từ tiếng Hy Lạp, có ý nghĩa là người lái tàu hoặc hoa tiêu. Google mở mã nguồn Kubernetes từ năm 2014. Kubernetes xây dựng dựa trên một thập kỷ rưỡi kinh nghiệm mà Google có được với việc vận hành một khối lượng lớn workload trong thực tế, kết hợp với các ý tưởng và thực tiễn tốt nhất từ cộng đồng.
+Kubernetes là một nền tảng orchestration mã nguồn mở, được thiết kế để quản lý và tự động hóa việc triển khai các ứng dụng container hóa và microservices. Thuật ngữ Kubernetes, có nguồn gốc từ tiếng Hy Lạp với ý nghĩa "người lái tàu" hoặc "hoa tiêu", phản ánh vai trò của nó trong việc điều hướng và quản lý hệ thống container phức tạp.
 
-![Kubernetes](/images/1/kubernetes.webp?width=70pc)
+Google đã phát triển Kubernetes dựa trên kinh nghiệm vận hành production workloads quy mô lớn trong hơn 15 năm, trước khi mở mã nguồn vào năm 2014. Kể từ đó, nền tảng này đã phát triển thành một hệ sinh thái phong phú với sự đóng góp từ cộng đồng developer toàn cầu.
 
-#### Bối cảnh lịch sử dẫn đến Kubernetes
+![Kubernetes Architecture](/images/1/kubernetes.webp)
 
-Chúng ta hãy xem tại sao Kubernetes rất hữu ích bằng cách quay ngược thời gian.
+#### Quá Trình Phát Triển của Container Orchestration
 
-![Lịch sử các hình thức triển khai ứng dụng](/images/1/00010.svg?featherlight=false&width=60pc)
+Để hiểu rõ giá trị của Kubernetes, chúng ta cần nhìn lại quá trình phát triển của việc triển khai ứng dụng qua ba giai đoạn chính:
 
-**Thời đại triển khai theo cách truyền thống:** Ban đầu, các ứng dụng được chạy trên các máy chủ vật lý. Không có cách nào để xác định ranh giới tài nguyên cho các ứng dụng trong máy chủ vật lý và điều này gây ra sự cố phân bổ tài nguyên. Ví dụ, nếu nhiều ứng dụng cùng chạy trên một máy chủ vật lý, có thể có những trường hợp một ứng dụng sẽ chiếm phần lớn tài nguyên hơn và kết quả là các ứng dụng khác sẽ hoạt động kém đi. Một giải pháp cho điều này sẽ là chạy từng ứng dụng trên một máy chủ vật lý khác nhau. Nhưng giải pháp này không tối ưu vì tài nguyên không được sử dụng đúng mức và rất tốn kém cho các tổ chức để có thể duy trì nhiều máy chủ vật lý như vậy.
+![Evolution of Deployment](/images/1/00010.svg)
 
-**Thời đại triển khai ảo hóa:** Như một giải pháp, ảo hóa đã được giới thiệu. Nó cho phép bạn chạy nhiều Máy ảo (VM) trên CPU của một máy chủ vật lý. Ảo hóa cho phép các ứng dụng được cô lập giữa các VM và cung cấp mức độ bảo mật vì thông tin của một ứng dụng không thể được truy cập tự do bởi một ứng dụng khác.
+**Giai Đoạn Traditional Deployment**: Trong thời kỳ đầu, các ứng dụng chạy trực tiếp trên physical servers. Điều này dẫn đến nhiều thách thức về resource allocation, khi không có cách hiệu quả để kiểm soát việc phân bổ tài nguyên giữa các ứng dụng, dẫn đến tình trạng resource contention và underutilization.
 
-Ảo hóa cho phép sử dụng tốt hơn các tài nguyên trong một máy chủ vật lý và cho phép khả năng mở rộng tốt hơn vì một ứng dụng có thể được thêm hoặc cập nhật dễ dàng, giảm chi phí phần cứng và hơn thế nữa. Với ảo hóa, bạn có thể có một tập hợp các tài nguyên vật lý dưới dạng một cụm các máy ảo sẵn dùng.
+**Giai Đoạn Virtualized Deployment**: Công nghệ virtualization cho phép chạy nhiều Virtual Machines (VMs) trên cùng một physical server. VMs mang lại khả năng isolation tốt hơn và tận dụng tài nguyên hiệu quả hơn. Mỗi VM hoạt động như một máy tính độc lập với đầy đủ OS stack.
 
-Mỗi VM là một máy tính chạy tất cả các thành phần, bao gồm cả hệ điều hành riêng của nó, bên trên phần cứng được ảo hóa.
+**Giai Đoạn Container Deployment**: Container technology đại diện cho bước tiến mới nhất, cung cấp một môi trường lightweight và portable hơn so với VMs. Containers chia sẻ host OS kernel nhưng vẫn duy trì tính isolation ở mức process level.
 
-**Thời đại triển khai Container:** Các container tương tự như VM, nhưng chúng có tính cô lập để chia sẻ Hệ điều hành (HĐH) giữa các ứng dụng. Do đó, container được coi là nhẹ (lightweight). Tương tự như VM, một container có hệ thống tệp (filesystem), CPU, bộ nhớ, process space, v.v. Khi chúng được tách rời khỏi cơ sở hạ tầng bên dưới, chúng có thể khả chuyển (portable) trên cloud hoặc các bản phân phối Hệ điều hành.
+#### Lợi Ích của Container Technology
 
-Các container đã trở nên phổ biến vì chúng có thêm nhiều lợi ích, chẳng hạn như:
+Container technology mang lại nhiều ưu điểm quan trọng cho DevOps workflow:
 
-- Tạo mới và triển khai ứng dụng Agile: gia tăng tính dễ dàng và hiệu quả của việc tạo các container image so với việc sử dụng VM image.
-- Phát triển, tích hợp và triển khai liên tục: cung cấp khả năng build và triển khai container image thường xuyên và đáng tin cậy với việc rollbacks dễ dàng, nhanh chóng.
-- Phân biệt giữa Dev và Ops: tạo các images của các application container tại thời điểm build/release thay vì thời gian triển khai, do đó phân tách các ứng dụng khỏi hạ tầng.
-- Khả năng quan sát không chỉ hiển thị thông tin và các metric ở mức Hệ điều hành, mà còn cả application health và các tín hiệu khác.
-- Tính nhất quán về môi trường trong suốt quá trình phát triển, testing và trong production: Chạy tương tự trên laptop như trên cloud.
-- Tính khả chuyển trên cloud và các bản phân phối HĐH: Chạy trên Ubuntu, RHEL, CoreOS, on-premises, Google Kubernetes Engine và bất kì nơi nào khác.
-- Quản lý tập trung ứng dụng: Tăng mức độ trừu tượng từ việc chạy một Hệ điều hành trên phần cứng ảo hóa sang chạy một ứng dụng trên một HĐH bằng logical resources.
-- Các micro-services phân tán, elastic: ứng dụng được phân tách thành các phần nhỏ hơn, độc lập và thể được triển khai và quản lý một cách linh hoạt - chứ không phải một app nguyên khối (monolithic).
-- Cô lập các tài nguyên: dự đoán hiệu năng ứng dụng
-- Sử dụng tài nguyên: hiệu quả
+1. **Agile Application Creation and Deployment**: Đơn giản hóa quy trình build và deploy container images so với VM images.
 
-#### Tại sao bạn cần Kubernetes và nó có thể làm những gì?
-Các container là một cách tốt để đóng gói và chạy các ứng dụng của bạn. Trong môi trường production, bạn cần quản lý các container chạy các ứng dụng và đảm bảo rằng không có khoảng thời gian downtime. Ví dụ, nếu một container bị tắt đi, một container khác cần phải khởi động lên. Điều này sẽ dễ dàng hơn nếu được xử lý bởi một hệ thống.
+2. **CI/CD**: Hỗ trợ build, test và deployment liên tục với khả năng rollback nhanh chóng.
 
-Đó là cách Kubernetes đến với chúng ta. Kubernetes cung cấp cho bạn một framework để chạy các hệ phân tán một cách mạnh mẽ. Nó đảm nhiệm việc nhân rộng và chuyển đổi dự phòng cho ứng dụng của bạn, cung cấp các mẫu deployment và hơn thế nữa. Ví dụ, Kubernetes có thể dễ dàng quản lý một triển khai canary cho hệ thống của bạn.
+3. **Dev/Ops Separation**: Tách biệt concerns giữa development và operations teams.
 
-Kubernetes cung cấp cho bạn:
+4. **Observability**: Cung cấp visibility không chỉ về OS metrics mà còn về application health.
 
-- **Phát hiện dịch vụ và cân bằng tải:**
-        Kubernetes có thể expose một container sử dụng DNS hoặc địa chỉ IP của riêng nó. Nếu lượng traffic truy cập đến một container cao, Kubernetes có thể cân bằng tải và phân phối lưu lượng mạng (network traffic) để việc triển khai được ổn định.
+5. **Environmental Consistency**: Đảm bảo môi trường development, testing và production nhất quán.
 
-- **Điều phối bộ nhớ:**
-    Kubernetes cho phép bạn tự động mount một hệ thống lưu trữ mà bạn chọn, như local storages, public cloud providers, v.v.
+6. **Cloud and OS Distribution Portability**: Có thể chạy trên nhiều nền tảng cloud và OS distributions khác nhau.
 
-- **Tự động rollouts và rollbacks:**
-    Bạn có thể mô tả trạng thái mong muốn cho các container được triển khai dùng Kubernetes và nó có thể thay đổi trạng thái thực tế sang trạng thái mong muốn với tần suất được kiểm soát. Ví dụ, bạn có thể tự động hoá Kubernetes để tạo mới các container cho việc triển khai của bạn, xoá các container hiện có và áp dụng tất cả các resource của chúng vào container mới.
-  
-- **Đóng gói tự động:**
-    Bạn cung cấp cho Kubernetes một cluster gồm các node mà nó có thể sử dụng để chạy các tác vụ được đóng gói (containerized task). Bạn cho Kubernetes biết mỗi container cần bao nhiêu CPU và bộ nhớ (RAM). Kubernetes có thể điều phối các container đến các node để tận dụng tốt nhất các resource của bạn.
-  
-- **Tự phục hồi:**
-    Kubernetes khởi động lại các containers bị lỗi, thay thế các container, xoá các container không phản hồi lại cấu hình health check do người dùng xác định và không cho các client biết đến chúng cho đến khi chúng sẵn sàng hoạt động.
+#### Vai Trò và Ứng Dụng của Kubernetes
 
-- **Quản lý cấu hình và bảo mật:**
-    Kubernetes cho phép bạn lưu trữ và quản lý các thông tin nhạy cảm như: password, OAuth token và SSH key. Bạn có thể triển khai và cập nhật lại secret và cấu hình ứng dụng mà không cần build lại các container image và không để lộ secret trong cấu hình stack của bạn.
+Kubernetes đảm nhận vai trò quan trọng trong việc quản lý container trong môi trường production. Khi hệ thống của bạn phải đảm bảo high availability và zero downtime, việc quản lý container một cách thủ công trở nên không khả thi. Kubernetes cung cấp framework mạnh mẽ để orchestrate distributed systems, tự động hóa nhiều tác vụ quan trọng:
 
+#### Service Discovery và Load Balancing
+Kubernetes tích hợp DNS service discovery và load balancing nâng cao. Mỗi container có thể được exposed thông qua DNS name hoặc IP address riêng. Khi traffic tới một service tăng cao, Kubernetes tự động phân phối network traffic để đảm bảo system stability và performance.
 
-#### Kubernetes không phải là...
+#### Storage Orchestration
+Kubernetes cho phép tự động mount storage systems theo nhu cầu. Storage có thể đến từ local storage, cloud providers (như AWS EBS), hoặc shared network storage systems (như NFS). Việc quản lý storage được abstracted away từ application layer.
 
-Kubernetes không phải là một hệ thống PaaS (Nền tảng như một Dịch vụ) truyền thống, toàn diện. Do Kubernetes hoạt động ở tầng container chứ không phải ở tầng phần cứng, nó cung cấp một số tính năng thường áp dụng chung cho các dịch vụ PaaS, như triển khai, nhân rộng, cân bằng tải, ghi nhật ký và giám sát. Tuy nhiên, Kubernetes không phải là cấu trúc nguyên khối và các giải pháp mặc định này là tùy chọn và có thể cắm được (pluggable).
+#### Automated Rollouts và Rollbacks
+Kubernetes sử dụng declarative approach để quản lý application state. Bạn định nghĩa desired state, và Kubernetes controller sẽ liên tục điều chỉnh actual state để match với desired state. Điều này cho phép:
+- Zero-downtime deployments
+- Automated rollbacks khi phát hiện issues
+- Phân bổ resources một cách thông minh
 
-**Kubernetes KHÔNG thực hiện các việc sau:**
+#### Bin Packing Tự Động
+Kubernetes optimizer có thể tự động phân bổ container workloads across node clusters dựa trên resource requirements và constraints. Điều này tối ưu hóa việc sử dụng infrastructure resources và tiết kiệm chi phí.
 
-- Giới hạn các loại ứng dụng được hỗ trợ. Kubernetes nhằm mục đích hỗ trợ một khối lượng công việc cực kỳ đa dạng, bao gồm cả stateless, stateful và xử lý dữ liệu. Nếu một ứng dụng có thể chạy trong một container, nó sẽ chạy rất tốt trên Kubernetes.
+#### Self-healing
+Kubernetes platform tích hợp nhiều self-healing capabilities:
+- Tự động restart failed containers
+- Replace và reschedule containers khi node fails
+- Kill containers không phản hồi health check
+- Không expose containers tới clients cho đến khi ready
 
-- Triển khai mã nguồn và không build ứng dụng của bạn. Quy trình CI/CD được xác định bởi tổ chức cũng như các yêu cầu kỹ thuật.
-Không cung cấp các service ở mức ứng dụng, như middleware (ví dụ, các message buses), các framework xử lý dữ liệu (ví dụ, Spark), cơ sở dữ liệu (ví dụ, MySQL), bộ nhớ cache, cũng như hệ thống lưu trữ của cluster (ví dụ, Ceph). Các thành phần như vậy có thể chạy trên Kubernetes và/hoặc có thể được truy cập bởi các ứng dụng chạy trên Kubernetes thông qua các cơ chế di động, chẳng hạn như Open Service Broker.
+#### Secrets và Configuration Management 
+Kubernetes cung cấp secure way để manage sensitive information như:
+- Passwords
+- OAuth tokens  
+- SSH keys
+- TLS certificates
 
-- Bắt buộc các giải pháp ghi lại nhật ký (logging), giám sát (monitoring) hoặc cảnh báo (alerting). Nó cung cấp một số sự tích hợp như proof-of-concept, và cơ chế để thu thập và xuất các số liệu.
+Các sensitive data này được quản lý và cập nhật mà không cần rebuild container images hoặc expose secrets trong stack configuration.
 
-- Cung cấp, không bắt buộc một cấu hình ngôn ngữ/hệ thống (ví dụ: Jsonnet). Nó cung cấp một API khai báo có thể được targeted bởi các hình thức khai báo tùy ý.
+#### Giới Hạn và Scope của Kubernetes
 
-- Cung cấp cũng như áp dụng bất kỳ cấu hình toàn diện, bảo trì, quản lý hoặc hệ thống tự phục hồi.
+Mặc dù mạnh mẽ, Kubernetes không phải là giải pháp "silver bullet" cho mọi use case. Một số điểm quan trọng cần lưu ý:
 
-Ngoài ra, Kubernetes cũng không phải một hệ thống điều phối đơn thuần. Trong thực tế, nó loại bỏ sự cần thiết của việc điều phối. Định nghĩa kỹ thuật của điều phối là việc thực thi một quy trình công việc được xác định: đầu tiên làm việc A, sau đó là B rồi sau chót là C. Ngược lại, Kubernetes bao gồm một tập các quy trình kiểm soát độc lập, có thể kết hợp, liên tục điều khiển trạng thái hiện tại theo trạng thái mong muốn đã cho. Nó không phải là vấn đề làm thế nào bạn có thể đi được từ A đến C. Kiểm soát tập trung cũng không bắt buộc. Điều này dẫn đến một hệ thống dễ sử dụng hơn, mạnh mẽ hơn, linh hoạt hơn và có thể mở rộng.
+#### Không Phải Traditional PaaS
+Kubernetes cung cấp building blocks cho container orchestration nhưng không phải là full PaaS solution. Nó:
+- Không prescribe logging, monitoring hay alerting solutions
+- Không force specific configuration language/system
+- Không provide built-in CI/CD pipeline
 
-### Amazon Elastic Kubernetes Service (EKS)
-Amazon Elastic Kubernetes Service (Amazon EKS) là một dịch vụ được quản lý giúp loại bỏ nhu cầu cài đặt, vận hành và bảo trì lớp điều khiển Kubernetes của riêng bạn trên Amazon Web Services (AWS).
+#### Application Workload Flexibility
+Kubernetes designed để support diverse workloads:
+- Stateless applications
+- Stateful applications  
+- Data processing workloads
+- Batch jobs
 
-![EKS](/images/1/EKS.png?width=90pc)
+Tuy nhiên, application phải có thể containerized để chạy trên Kubernetes.
 
-#### Các tính năng của Amazon EKS
-Sau đây là các tính năng chính của Amazon EKS:
+#### Amazon EKS (Elastic Kubernetes Service)
 
-##### **Xây dựng mạng và xác thực an toàn**
-Amazon EKS tích hợp khối công việc của bạn trên Kubernetes với các dịch vụ mạng và bảo mật của AWS. Nó cũng tích hợp với AWS Identity and Access Management (IAM) để cung cấp xác thực cho các cụm Kubernetes của bạn.
+Amazon EKS là managed Kubernetes service trên AWS cloud platform. EKS eliminated overhead của việc manually managing Kubernetes control plane, cho phép teams focus vào application development và deployment.
 
-##### **Dễ dàng mở rộng cụm**
-Amazon EKS cho phép bạn dễ dàng chỉnh quy mô các cụm Kubernetes của mình lên và xuống dựa trên nhu cầu của khối lượng công việc của bạn. Amazon EKS hỗ trợ tự động mở rộng Pod theo chiều ngang dựa trên CPU hoặc số liệu tùy chỉnh và tự động mở rộng cụm dựa trên nhu cầu của toàn bộ khối lượng công việc.
+#### Core Features của Amazon EKS
 
-##### **Trải nghiệm Kubernetes được quản lý**
-Bạn có thể thực hiện các thay đổi đối với các cụm Kubernetes của mình bằng eksctl, AWS Management Console, AWS Command Line Interface (AWS CLI), API, kubectl và Terraform.
+##### Secure Networking và Authentication
+EKS deep integration với AWS networking và security services:
+- Native integration với VPC networking
+- AWS IAM authentication cho Kubernetes clusters
+- Support cho security groups và network policies
+- Automated certificate management
 
-##### **Tính khả dụng cao**
-Amazon EKS cung cấp tính khả dụng cao cho lớp điều khiển của bạn trên nhiều Vùng khả dụng.
+##### Scalability
+EKS provides enterprise-grade scalability:
+- Horizontal pod autoscaling based on metrics
+- Cluster autoscaling để add/remove nodes
+- Support cho multiple node groups
+- Cross-zone high availability
 
-##### **Tích hợp với các dịch vụ AWS**
-Amazon EKS tích hợp với các dịch vụ AWS khác, cung cấp nền tảng toàn diện để triển khai và quản lý các ứng dụng được chứa trong container của bạn. Bạn cũng có thể dễ dàng khắc phục sự cố khối lượng công việc Kubernetes của mình hơn bằng nhiều công cụ quan sát khác nhau.
+##### Managed Experience  
+EKS simplified cluster management thông qua:
+- eksctl CLI tool
+- AWS Management Console
+- AWS CLI và APIs
+- Infrastructure as Code với Terraform
+- Native kubectl support
+
+##### High Availability
+EKS designed for reliability:
+- Control plane runs across multiple Availability Zones
+- Automated failover
+- Managed etcd cluster
+- Automated backup và restore
+
+##### AWS Service Integration
+EKS tích hợp seamlessly với AWS ecosystem:
+- Container registry (ECR)
+- Load balancing (ALB/NLB)
+- IAM for authentication
+- CloudWatch for monitoring
+- AWS App Mesh for service mesh
+- AWS CloudTrail for audit logging
+
+Qua đó, EKS cung cấp production-ready Kubernetes platform với enterprise features và AWS reliability.

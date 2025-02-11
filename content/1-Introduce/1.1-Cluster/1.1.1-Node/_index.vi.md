@@ -1,26 +1,33 @@
 ---
-title: "Nodes"
+title: "Nodes trong Kubernetes"
 weight: 1
 chapter: false
 pre: "<b> 1.1.1 </b>"
 ---
 
-**Kubernetes** chạy các tác vụ của bạn bằng cách đặt các container vào trong **Pods** để chạy trên **Nodes**. Một node có thể là máy ảo hoặc máy vật lý, tùy thuộc vào cụm. Mỗi node được quản lý bởi bộ điều khiển và chứa các dịch vụ cần thiết để chạy **Pods**.
 
-![Kubernetes](/images/1/1/1/0001.png?featherlight=false&width=40pc)
 
-Thông thường, bạn sẽ có nhiều **nodes** trong một cụm; trong một môi trường học tập hoặc môi trường có hạn chế về tài nguyên, bạn có thể chỉ có một **node**.
+#### Tổng quan
 
-Các thành phần trên một **node** bao gồm **kubelet**, một runtime container, và **kube-proxy**.
+**Kubernetes** là nền tảng điều phối container, vận hành workload của bạn bằng cách đặt các container vào trong **Pods** và triển khai chúng trên các **Nodes**. Một node có thể là máy ảo (Virtual Machine) hoặc máy vật lý (Physical Machine), phụ thuộc vào cấu trúc của cluster. Mỗi node được quản lý bởi control plane và chứa các service thiết yếu để vận hành **Pods**.
 
-### Quản lý
+![Kiến trúc Kubernetes](/images/1/1/1/0001.png?featherlight=false&width=40pc)
 
-Có hai cách chính để thêm Node vào máy chủ API:
+Trong môi trường production, một Kubernetes cluster thường bao gồm nhiều **nodes** để đảm bảo tính sẵn sàng cao và khả năng mở rộng. Tuy nhiên, trong môi trường development hoặc learning, việc sử dụng single-node cluster là phổ biến để tiết kiệm tài nguyên.
 
-1. Kubelet trên một node tự đăng ký với Control Plane
-2. Bạn (hoặc người dùng khác) tự thêm đối tượng Node
+Mỗi **node** bao gồm ba thành phần core:
+- **kubelet**: Agent chạy trên mỗi node
+- Container runtime: Phần mềm thực thi container
+- **kube-proxy**: Network proxy để thực hiện các service networking
 
-Sau khi tạo đối tượng Node hoặc kubelet trên một node tự đăng ký, Control Plane sẽ kiểm tra xem đối tượng Node mới có hợp lệ hay không. Ví dụ: nếu bạn thử tạo Node từ tệp kê khai JSON sau:
+#### Cơ chế quản lý Node
+
+Kubernetes hỗ trợ hai phương thức để thêm Node vào API Server:
+
+1. Self-registration: Kubelet tự động đăng ký với Control Plane
+2. Manual registration: Administrator thực hiện thêm Node object
+
+Sau khi Node được tạo, Control Plane sẽ validate Node object. Ví dụ về manifest để tạo Node:
 
 ```json
 {
@@ -34,29 +41,33 @@ Sau khi tạo đối tượng Node hoặc kubelet trên một node tự đăng k
   }
 }
 ```
-Kubernetes tạo một đối tượng Node nội bộ (gọi là "đối tượng đại diện" (representation)). Kubernetes kiểm tra xem kubelet đã đăng ký với API Server khớp với trường metadata.name của Node hay chưa. Nếu node khỏe mạnh (tức là tất cả các dịch vụ cần thiết đều đang chạy), thì node đó đủ điều kiện để chạy Pod. Nếu không, node đó sẽ bị bỏ qua đối với bất kỳ hoạt động cụm nào cho đến khi node đó khỏe mạnh.
 
-### Tính độc nhất của tên node
-Một Node được xác định bằng tên. Hai Node không thể cùng lúc mang cùng tên. Kubernetes cũng giả định rằng một tài nguyên với một tên gọi là cùng một đối tượng. Trong trường hợp của một Node, ta ngầm định rằng một đối tượng đại diện sử dụng cùng tên sẽ có cùng trạng thái (ví dụ: cài đặt mạng, nội dung đĩa root) và các thuộc tính như nhãn node. Điều này có thể dẫn đến sự không nhất quán nếu một thể hiện được sửa đổi mà không thay đổi tên của nó. Nếu Node cần được thay thế hoặc áp dụng nhiều cập nhật, đối tượng Node hiện có cần được xóa khỏi máy chủ API trước và thêm lại sau khi cập nhật.
+#### Node Identity và Status
 
-### Trạng thái node
-Trạng thái của một Node chứa các thông tin sau:
+#### Unique Node Name
+Mỗi Node trong cluster phải có tên duy nhất. Kubernetes sử dụng tên này để định danh Node và theo dõi trạng thái của nó. Khi cần thay đổi cấu hình Node, administrator cần xóa Node object hiện tại và tạo lại với cấu hình mới.
 
-- Địa chỉ
+#### Node Status 
+Node status bao gồm các thông tin quan trọng:
 
-- Điều kiện/Tình trạng
+- Addresses: Địa chỉ network của node
+- Conditions: Trạng thái hoạt động của node
+- Capacity & Allocatable: Tài nguyên có sẵn và có thể phân bổ
+- Info: Thông tin hệ thống
 
-- Dung lượng và khả năng phân bổ
-
-- Thông tin
-
-Bạn có thể sử dụng kubectl để xem trạng thái của một Node và các chi tiết khác:
+Administrator có thể kiểm tra status của Node bằng lệnh:
 
 ```bash
-kubectl describe node <insert-node-name-here>
+kubectl describe node <node-name>
 ```
 
-### Theo dõi lượng tài nguyên
-Đối tượng Node theo dõi thông tin về lượng tài nguyên của Node: ví dụ, dung lượng bộ nhớ khả dụng và số lượng CPU. Các Node tự đăng ký sẽ báo cáo dung lượng của chúng trong quá trình đăng ký. Nếu bạn thêm Node theo cách thủ công, thì bạn cần đặt thông tin dung lượng của node khi thêm node đó.
+#### Resource Management
 
-Trình lên lịch Kubernetes đảm bảo rằng có đủ tài nguyên cho tất cả các Pod trên Node. Trình lên lịch kiểm tra xem tổng các yêu cầu của container trên node có lớn hơn dung lượng của node hay không. Tổng các yêu cầu đó bao gồm tất cả các container do kubelet quản lý, nhưng không bao gồm bất kỳ container nào được khởi chạy trực tiếp bởi thời gian chạy container và cũng không bao gồm bất kỳ quy trình nào chạy bên ngoài tầm kiểm soát của kubelet.
+Node object theo dõi thông tin về compute resources (CPU, memory) của Node. Đối với self-registered nodes, thông tin này được báo cáo tự động trong quá trình registration. Với manually-added nodes, administrator cần khai báo resource capacity khi tạo Node.
+
+Kubernetes scheduler đảm bảo resource utilization hiệu quả bằng cách:
+- Kiểm tra tổng resource requests của tất cả Pods trên Node
+- So sánh với available capacity của Node
+- Chỉ schedule Pods mới khi Node có đủ tài nguyên
+
+Việc theo dõi resource chỉ áp dụng cho các containers được quản lý bởi kubelet, không bao gồm các containers được khởi động trực tiếp bởi container runtime hoặc các processes chạy ngoài kubelet control.
